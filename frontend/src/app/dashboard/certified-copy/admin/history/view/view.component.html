@@ -1,0 +1,25 @@
+<h5 *ngIf="!data[0]">No Applications</h5>
+<table class="table table-bordered" datatable [dtOptions]="dtOptions" *ngIf="data[0]">
+    <thead>
+        <tr>
+            <th scope="col">S.No.</th>
+            <th scope="col">Application ID</th>
+            <th scope="col">Applicant Name</th>
+            <th scope="col">Applied Date</th>
+            <th scope="col">Calculated Amount</th>
+            <th scope="col">Paid Amount</th>
+            <th scope="col">Operations</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let d of data; let i=index">
+            <td>{{ i+1 }}</td>
+            <td>{{ d.application_id }}</td>
+            <td>{{ d.applicant_name }} ({{d.applicant_contact}})</td>
+            <td>{{ d.application_date | date: 'dd-MM-YYYY' }}</td>
+            <td>₹ {{ d.calculated_amount }}</td>
+            <td>₹ {{ d.paid_amount }}</td>
+            <td class="text-center highlight" (click)="onRouteDetails(d.application_id)">View</td>
+        </tr>
+    </tbody>
+</table>

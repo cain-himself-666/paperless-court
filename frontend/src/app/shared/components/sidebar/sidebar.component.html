@@ -1,0 +1,17 @@
+<div class="background" [ngClass]="{'activated': backgroundActive, '': !backgroundActive}" [ngClass]="{'activate': toggleValue, '': !toggleValue}">
+    <div class="sidebar" [ngClass]="{'bigscreen': !mobileActive, 'smallscreen': mobileActive}" [class]="getClass(bar)" #bar>
+        <div class="logo_content">
+            <div class="logo text-center text-light">
+                <img src="assets/images/hcs_logo.png" class="mt-4" height="120px;">
+            </div>
+        </div>
+        <hr>
+        <i [ngClass]="{'bi bi-x-lg': mobileActive, 'bi bi-list': !mobileActive}" [ngStyle]="{'font-size': mobileActive ? '20px' : '32px'}" id="btn" (click)="onToggle()"></i>
+        <div *ngIf="!mobileActive; else mobileDeactive">
+            <app-sidebar-menus [toggleValue]="toggleValue"></app-sidebar-menus>
+        </div>
+        <ng-template #mobileDeactive>
+            <app-sidebar-menus></app-sidebar-menus>
+        </ng-template>
+    </div>
+</div>

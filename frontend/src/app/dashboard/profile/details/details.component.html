@@ -1,0 +1,43 @@
+<section class="mt-3">
+    <form #update="ngForm" (ngSubmit)="onUpdateProfile(update)">
+        <div class="text-end" *ngIf="!isAdmin">
+            <button class="btn btn-primary" (click)="onEnableEditMode()" type="button" [disabled]="editMode"><i class="bi bi-pencil-square"></i></button>
+            <button class="btn btn-primary ms-3" type="submit" [disabled]="!editMode">Update</button>
+        </div>
+        <div class="details row">
+            <div class="col-md-3 mt-3">
+                <label class="form-label">Contact Number</label>
+                <input type="text" class="form-control" disabled name="contact" [ngModel]="role.username" #contact="ngModel">
+            </div>
+            <div class="col-md-3 mt-3">
+                <label class="form-label">Name</label>
+                <input type="text" class="form-control" [disabled]="!editMode" name="name" [ngModel]="role.related_profile.name" #name="ngModel" required>
+            </div>
+            <div class="col-md-3 mt-3">
+                <label class="form-label">Email</label>
+                <input type="text" class="form-control" [disabled]="!editMode" name="email" [ngModel]="role.related_profile.email" #email="ngModel" required>
+            </div>
+            <div class="col-md-3 mt-3">
+                <label class="form-label">Gender</label>
+                <input type="text" class="form-control" [disabled]="!editMode" name="gender" [ngModel]="role.related_profile.gender" #gender="ngModel" required>
+            </div>
+            <div class="col-md-3 mt-3" *ngIf="isAdvocate">
+                <label class="form-label">Bar Registration Number</label>
+                <input type="text" class="form-control" disabled [value]="role.related_profile.bar_registration_number">
+            </div>
+            <div class="col-md-3 mt-3" *ngIf="!isAdmin">
+                <div *ngIf="isAdvocate; else user">
+                    <label class="form-label">ID Card / <a href="{{url}}/api/media/advId/{{role.related_profile.bar_certificate}}" target="_blank">(View ID Card)</a></label>
+                    <input type="file" class="form-control" (change)="onUploadIdCard($event)" [disabled]="!editMode">
+                </div>
+                <ng-template #user>
+                    <label class="form-label">ID Proof / <a href="{{url}}/api/media/documents/{{role.related_profile.id_proof}}" target="_blank">(View ID Proof)</a></label>
+                    <input type="file" class="form-control" (change)="onUploadIdProof($event)" [disabled]="!editMode">
+                </ng-template>
+            </div>
+        </div>
+    </form>
+    <div class="alert alert-success mt-3" *ngIf="showSuccess">
+        {{ showSuccess}}
+    </div>
+</section>

@@ -1,0 +1,222 @@
+<div class="row mb-5" *ngIf="case_details">
+    <div class="col-md-3">
+        <label class="form-label header">CNR</label><br>
+        <span>{{ case_details.cnr }}</span>
+    </div>
+    <div class="col-md-3">
+        <label class="form-label header">Case Number</label><br>
+        <span>{{ case_details.case_number}}</span>
+    </div>
+    <div class="col-md-3">
+        <label class="form-label header">Petitioner</label><br>
+        <span>{{ case_details.pet_name }}</span>
+    </div>
+    <div class="col-md-3">
+        <label class="form-label header">Respondent</label><br>
+        <span>{{ case_details.res_name }}</span>
+    </div>
+</div>
+<div class="mt-3 text-end" *ngIf="!profile_details">
+    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="onToggleModal('discard')">Discard</button>
+    <button class="btn btn-primary ms-3" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="onToggleModal('confirm')">Confirm</button>
+</div>
+<div class="row" *ngIf="profile_details">
+    <div class="col-md-6">
+        <div class="text-end mb-3" >
+            <a data-bs-toggle="modal" data-bs-target="#exampleModal2" (click)="onToggelModal2('oj')" class="highlight">(View Judgments/Orders)</a>
+        </div>
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <td class="header" width="20%">Applicant</td>
+                    <td>{{ profile_details.applicant_name }}</td>
+                    <td class="header" width="20%">Contact</td>
+                    <td>{{ profile_details.applicant_contact }}</td>
+                </tr>
+                <tr>
+                    <td class="header" width="20%">Mode</td>
+                    <td>{{ profile_details.mode === 'Both' ? 'Both (Physical & Email)' : profile_details.mode }}</td>
+                    <td class="header" width="20%">Accused</td>
+                    <td>{{ profile_details.is_accused ? 'Yes' : 'No' }}</td>
+                </tr>
+                <tr>
+                    <td class="header" width="20%">Total Pages</td>
+                    <td>{{ profile_details.total_pages * profile_details.copies }}</td>
+                    <td class="header" width="20%">Total Cost</td>
+                    <td>₹ {{ profile_details.total_cost }}</td>
+                </tr>
+                <tr *ngIf="profile_details.user_type; else adv">
+                    <td class="header" width="20%">User Type</td>
+                    <td>{{ profile_details.user_type === 'pip' ? 'Party In Person' : 'Stranger' }}</td>
+                    <td class="header" width="20%">Reason</td>
+                    <td>{{ profile_details.reason || 'N/A' }}</td>
+                </tr>
+                <ng-template #adv>
+                    <tr>
+                        <td class="header" width="20%">User Type</td>
+                        <td>Advocate</td>
+                        <td class="header" width="20%">Reason</td>
+                        <td>N/A</td>
+                    </tr>
+                </ng-template>
+                <tr>
+                    <td class="header">ID Proof</td>
+                    <td><a [href]="profile_details.applicant_id ? appUrl+'/api/media/documents/'+profile_details.applicant_id : appUrl+'/api/media/advId/'+profile_details.bar_id" target="_blank">View</a></td>
+                    <td class="header">Date of Applied</td>
+                    <td>{{ profile_details.application_date | date: 'dd-MM-YYYY' }}</td>
+                </tr>
+                <tr *ngIf="profile_details.collected_date">
+                    <td class="header">Date of Issue</td>
+                    <td>{{ profile_details.issued_date | date: 'dd-MM-YYYY' }}</td>
+                    <td class="header">Date of Collection</td>
+                    <td>{{ profile_details.collected_date | date: 'dd-MM-YYYY' }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-6">
+        <div class="d-flex justify-content-between mb-2">
+            <label class="form-label header mt-1">Remarks</label>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal2" (click)="onToggelModal2('remarks')">+</button>
+        </div>
+        <div class="w-100 p-2" style="height: 120px; border: 1px solid black; border-radius: 15px; overflow-y:scroll">
+            <span *ngFor="let r of remarks">{{r}}<br></span>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" [ngClass]="{'modal-lg': modal_key}">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Application ID: {{ application_id }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" #closeBtn></button>
+            </div>
+            <div class="modal-body">
+                <div *ngIf="!modal_key">
+                    Are you sure you want to discard this application ?
+                </div>
+                <div *ngIf="modal_key">
+                    <div class="row">
+                        <div class="col-md-2 mb-2">
+                            <label class="form-label header">Total Pages</label><br>
+                            <span>{{ totalPage }}</span>
+                        </div>
+                        <div class="col-md-3 mb-2">
+                            <label class="form-label header">Copies</label>
+                            <select class="form-select" style="width: 50%" (input)="onSelectCopies($event)">
+                                <option *ngFor="let c of copies" [value]="c">{{c}}</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2 mb-2">
+                            <label class="form-label header">Mode</label><br>
+                            <input type="radio" id="payment" name="payment" value="Physical" (click)="onSelectMode('Physical')">&nbsp;Physical<br>
+                            <input type="radio" id="payment" name="payment" value="Email" (click)="onSelectMode('Email')" checked>&nbsp;Email<br>
+                            <input type="radio" id="payment" name="payment" value="Both" (click)="onSelectMode('Both')">&nbsp;Both<br>
+                        </div>
+                        <div class="col-md-3 mb-2" *ngIf="!isAdvocate">
+                            <label class="form-label header">User Type</label><br>
+                            <input type="radio" name="user" value="pip" checked (click)="selectUserType('pip')"> Party In Person<br>
+                            <input type="radio" name="user" value="stranger" (click)="selectUserType('stranger')"> Stranger<br>
+                        </div>
+                        <div class="col-md-2 mb-2" *ngIf="isAccusedOption && (isAdvocate || showIsAccused)">
+                            <label class="form-label header">Accused ?</label><br>
+                            <div class="text-center w-50">
+                                <input type="checkbox" [checked]="check_is_accused" (click)="isAccused($event)">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-2" *ngIf="!showIsAccused">
+                        <div class="col-md-12">
+                            <label class="form-label header">Reason<span class="text-danger">*</span></label>
+                            <textarea class="form-control" #r rows="2" name="remarks" [(ngModel)]="reason"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-between">
+                <div>
+                    <label class="header">Total Cost:&nbsp;</label><span>₹ {{ getTotalCost() }}</span>
+                </div>
+                <button type="button" class="btn btn-primary" (click)="modal_key ? onSubmit() : onDiscardDraft()">{{ modal_key ? 'Submit' : 'Confirm'}}</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" [ngClass]="{'modal-lg': oj}">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Application ID: {{ application_id }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" #closeBtn2></button>
+            </div>
+            <form #remArks="ngForm" (ngSubmit)="onAddRemarks(remArks)">
+                <div class="modal-body">
+                    <div class="oj" *ngIf="oj">
+                        <div class="orders" *ngIf="orders[0]">
+                            <h5>Order(s)</h5>
+                            <hr>
+                            <table class="table table-bordered" *ngIf="orders[0]">
+                                <thead>
+                                    <tr>
+                                        <th width="7%">S.No.</th>
+                                        <th>Order Date</th>
+                                        <th width="10%">Pages</th>
+                                        <th width="10%">Copies</th>
+                                        <th width="20%" *ngIf="profile_details.mode != 'Physical' && (profile_details.application_status === 'Completed' || profile_details.application_status === 'Collected')">Certified Copy</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let o of orders; let i=index">
+                                        <td class="text-center">{{ i+1 }}</td>
+                                        <td><a (click)="getUrl(o.date, case_details.cnr!, o.number)" class="highlight">{{ o.date }}</a></td>
+                                        <td class="text-center">{{ o.pages }}</td>
+                                        <td class="text-center">{{ o.copies || 0 }}</td>
+                                        <td *ngIf="profile_details.mode != 'Physical' && o.cert_copy" class="text-center">
+                                            <a href="{{appUrl}}/api/media/certified_copies/{{application_id!}}_order_{{i+1}}.pdf" target="_blank"><i class="bi bi-eye"></i></a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="judgments" *ngIf="judgements[0]">
+                            <h5>Judgement(s)</h5>
+                            <hr>
+                            <table class="table table-bordered" *ngIf="judgements[0]">
+                                <thead>
+                                    <tr>
+                                        <th width="7%">S.No.</th>
+                                        <th>Judgement Date</th>
+                                        <th width="10%">Pages</th>
+                                        <th width="10%">Copies</th>
+                                        <th width="20%" *ngIf="profile_details.mode != 'Physical' && (profile_details.application_status === 'Completed' || profile_details.application_status === 'Completed')">Certified Copy</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let j of judgements; let i=index">
+                                        <td class="text-center">{{ i+1 }}</td>
+                                        <td><a (click)="getUrl(j.date, case_details.cnr!, 0)" class="highlight">{{ j.date }}</a></td>
+                                        <td class="text-center">{{ j.pages }}</td>
+                                        <td class="text-center">{{ j.copies || 0 }}</td>
+                                        <td *ngIf="profile_details.mode != 'Physical' && j.cert_copy" class="text-center">
+                                            <a href="{{appUrl}}/api/media/certified_copies/{{application_id!}}_judgment_{{i+1}}.pdf" target="_blank"><i class="bi bi-eye"></i></a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row" *ngIf="!oj">
+                        <div class="col-md-12">
+                            <label class="form-label header">Enter Remarks</label>
+                            <textarea class="form-control" rows="3" name="rem" ngModel #rem="ngModel" required></textarea>
+                            <small class="text-danger" *ngIf="rem.touched && rem.invalid">Please enter remarks</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" *ngIf="!oj">
+                    <button type="button" class="btn btn-primary" type="submit">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

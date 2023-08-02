@@ -1,0 +1,66 @@
+<form #registration="ngForm" (ngSubmit)="onRouteAckPage(registration)">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-floating mt-2 mb-3">
+                <input type="text" readonly class="form-control" placeholder="contact" [value]="contact" disabled>
+                <label>Contact</label>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-floating mt-2 mb-3">
+                <input type="text" class="form-control" placeholder="Name" name="name" ngModel #name="ngModel" required>
+                <label>Name</label>
+                <small class="text-danger" *ngIf="name.touched && name.invalid">Please enter name</small>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-floating mt-3 mb-3">
+                <input type="email" class="form-control" placeholder="Email" name="email" ngModel #email="ngModel" required email>
+                <label>Email</label>
+                <div *ngIf="email.touched && email.invalid">
+                    <small class="text-danger" *ngIf="email.errors!['required']">Please enter email</small>
+                    <small class="text-danger" *ngIf="email.errors!['email']">Invalid Email (Eg. abcd@domain.com)</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form mt-3 mb-3">
+                <label><small>Gender</small></label>
+                <select class="form-control" placeholder="Gender" name="gender" [ngModel]="selected_gender" #gender="ngModel" required>
+                    <option value="" disabled>---Select Gender---</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Others">Others</option>
+                </select>
+                <small class="text-danger" *ngIf="gender.touched && gender.invalid">Please select a gender</small>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form mt-3 mb-3">
+                <label class="form-label text-start">Upload ID Proof</label>
+                <input type="file" class="form-control" name="id_proof" ngModel #id_proof="ngModel" required (change)="onGetIdProof($event)">
+                <small class="text-danger" *ngIf="id_proof.touched && id_proof.invalid">Please upload an ID Proof</small>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-floating mt-2 mb-3">
+                <input type="password" class="form-control" placeholder="Password" name="pswd" ngModel #pswd="ngModel" required>
+                <label>Password</label>
+                <small class="text-danger" *ngIf="pswd.touched && pswd.invalid">Please enter password</small>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-floating mt-2 mb-3">
+                <input type="password" class="form-control" placeholder="Confirm Password" name="pswd2" ngModel #pswd2="ngModel" required>
+                <label>Confirm Password</label>
+                <div *ngIf="pswd2.touched">
+                    <small class="text-danger" *ngIf="pswd2.invalid">Please enter password</small>
+                    <small class="text-danger" *ngIf="pswd.value !== pswd2.value && !pswd2.invalid">Password Mismatch</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mt-3 mb-5 text-center">
+        <button class="btn btn-primary w-25" [disabled]="pswd.value !== pswd2.value">Submit</button>
+    </div>
+</form>

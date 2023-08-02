@@ -1,0 +1,26 @@
+<section>
+    <div class="d-flex justify-content-between">
+        <h4>My Case(s)</h4>
+        <button class="btn btn-primary" (click)="onRouteAdd()">+ Add</button>
+    </div>
+    <hr>
+    <h5 *ngIf="!my_cases[0]">No Cases Added</h5>
+    <table class="table table-bordered" datatable [dtOptions]="dtOptions" *ngIf="my_cases[0]">
+        <thead>
+            <tr>
+                <th class="col text-center">S.No.</th>
+                <th class="col text-center">Case Number</th>
+                <th class="col text-center">CNR</th>
+                <th class="col text-center">Operations</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="text-center" *ngFor="let m of my_cases; let i=index">
+                <td>{{i+1}}</td>
+                <td>{{m.case_number}}</td>
+                <td>{{m.cnr}}</td>
+                <td><i class="bi bi-eye-fill text-primary" (click)="onRouteDetails(m.cnr)"></i> / <i class="bi bi-trash3-fill text-danger" (click)="deleteCase(m.cnr)"></i></td>
+            </tr>
+        </tbody>
+    </table>
+</section>

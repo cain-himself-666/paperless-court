@@ -1,0 +1,61 @@
+<form #registration="ngForm" (ngSubmit)="onSubmit(registration)">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-floating mt-2 mb-3">
+                <input type="text" readonly class="form-control" placeholder="contact" [ngModel]="contact" name="mobile" #mobile="ngModel" disabled required>
+                <label>Contact</label>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-floating mt-2 mb-3">
+                <input type="text" readonly class="form-control" placeholder="Name" name="name" [ngModel]="advDetails.name" #name="ngModel" required>
+                <label>Name</label>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-floating mt-3 mb-3">
+                <input type="email" readonly class="form-control" placeholder="Email" name="email" [ngModel]="advDetails.email.toLowerCase()" #email="ngModel" required email>
+                <label>Email</label>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-floating mt-3 mb-3">
+                <input type="text" readonly class="form-control" placeholder="Name" name="gender" [ngModel]="advDetails.gender" #gender="ngModel" required>
+                <label>Gender</label>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-floating mt-3 mb-3">
+                <input type="text" class="form-control" placeholder="brn" name="brn" [ngModel]="advDetails.brn" #brn="ngModel" required>
+                <label>Bar Registration Number</label>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form mt-3 mb-3">
+                <label class="form-label text-start"><small>Upload ID Card</small></label>
+                <input type="file" class="form-control" name="brn_cert" ngModel #brn_cert="ngModel" required (change)="onGetIdCard($event)">
+                <small class="text-danger" *ngIf="brn_cert.touched && brn_cert.invalid">Please upload your ID Card</small>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-floating mt-2 mb-3">
+                <input type="password" class="form-control" placeholder="Password" name="pswd" ngModel #pswd="ngModel" required>
+                <label>Password</label>
+                <small class="text-danger" *ngIf="pswd.touched && pswd.invalid">Please enter password</small>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-floating mt-2 mb-3">
+                <input type="password" class="form-control" placeholder="Confirm Password" name="pswd2" ngModel #pswd2="ngModel" required>
+                <label>Confirm Password</label>
+                <div *ngIf="pswd2.touched">
+                    <small class="text-danger" *ngIf="pswd2.invalid">Please enter password</small>
+                    <small class="text-danger" *ngIf="pswd.value !== pswd2.value && !pswd2.invalid">Password Mismatch</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mt-3 mb-5 text-center">
+        <button class="btn btn-primary w-25" [disabled]="pswd.value !== pswd2.value">Submit</button>
+    </div>
+</form>

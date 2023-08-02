@@ -1,0 +1,15 @@
+<div class="title text-center mt-5 px-5">
+    <div class="ack">
+        <div class="wrapper">
+            <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
+                <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+            </svg>
+        </div>
+        <div class="text-center mt-3">
+            <h4>Your Application {{ application_id }} has been successfully submitted</h4><br>
+            <button class="btn btn-primary" (click)="onRouteForm()">Go Back</button>
+            <button class="btn btn-primary ms-3" routerLink="/dashboard/rti/applications/view">Go to Applications</button>
+        </div>
+    </div>
+</div>

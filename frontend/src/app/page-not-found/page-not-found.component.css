@@ -1,0 +1,8 @@
+@font-face {
+    font-family: 'averia';
+    src: url('../../assets/fonts/averia.ttf');
+} 
+h4, h5{
+    font-family: 'averia';
+    letter-spacing: 3px;
+}

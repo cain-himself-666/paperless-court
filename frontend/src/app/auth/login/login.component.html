@@ -1,0 +1,28 @@
+<div class="d-flex justify-content-center align-items-center px-3 py-5">
+    <div class="d-block" style="width: 63%">
+        <div class="text-center mb-5">
+            <img src="assets/images/hcs_logo.png">
+        </div>
+        <form #login="ngForm" (ngSubmit)="onSubmit(login)">
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" maxlength="10" minlength="1" id="floatingInput" placeholder="contact" name="contact" ngModel #contact="ngModel" required>
+                <label for="floatingInput">Mobile Number/Username</label>
+                <div *ngIf="contact.touched && contact.invalid">
+                    <small class="text-danger" *ngIf="contact.errors!['required']">Please enter mobile number</small>
+                    <small class="text-danger" *ngIf="(contact.errors!['minlength'] && contact.errors!['pattern']) || contact.errors!['minlength']">Please enter 10 digit mobile number</small>
+                    <small class="text-danger" *ngIf="contact.errors!['pattern'] && !contact.errors!['minlength']">Mobile number must not contain alphabets/special characters</small>
+                </div>
+            </div>
+            <div class="form-floating">
+                <input type="password" class="form-control" id="floatingPassword" placeholder="password" name="password" ngModel #password="ngModel" required>
+                <label for="floatingPassword">Password</label>
+                <small class="text-danger" *ngIf="password.touched && password.invalid">Please enter password</small>
+            </div>
+            <div class="text-center mt-4 mb-5">
+                <button class="btn btn-primary w-100">Login</button>
+                <hr>
+                <button class="btn btn-primary w-100" routerLink="/auth/registration" type="button">Registration</button>
+            </div>
+        </form>
+    </div>
+</div>

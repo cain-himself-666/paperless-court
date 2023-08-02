@@ -1,0 +1,13 @@
+<div class="back d-flex justify-content-center align-items-center vh-100">
+    <div class="card w-75">
+        <div class="row g-0">
+            <div class="img col-xl-7 col-lg-6 col-md-5 d-none d-md-block" style="z-index: 10">
+            </div>
+            <div class="col-xl-5 col-lg-6 col-md-7" style="overflow-x:hidden; overflow-y: scroll; height: 630px">
+                <div class="auth" [@routerAnimation]="prepareOutlet(outlet)">
+                    <router-outlet #outlet="outlet"></router-outlet>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

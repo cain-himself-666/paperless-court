@@ -1,0 +1,16 @@
+<ul class="nav nav-tabs">
+    <li class="nav-item" *ngIf="role === 2">
+      <a class="nav-link active" [ngClass]="{'active': showApplied}" (click)="onShowApplied({status: true})">Applied</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" [ngClass]="{'active': showForwarded}" (click)="onShowForwarded({status: true})">Forwarded</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" [ngClass]="{'active': showReceived}" (click)="onShowReceived({status: true})">Received</a>
+    </li>
+</ul>
+<section class="mt-3 px-4">
+  <app-applied *ngIf="role === 2 && showApplied"></app-applied>
+  <app-received *ngIf="showReceived"></app-received>
+  <app-forwarded *ngIf="showForwarded"></app-forwarded>
+</section>

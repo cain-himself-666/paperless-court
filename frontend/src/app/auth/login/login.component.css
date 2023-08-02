@@ -1,0 +1,15 @@
+img{
+    animation: greet 1.5s ease infinite;
+    height: 150px;
+}
+input:focus{
+    box-shadow: none;
+}
+@keyframes greet {
+    40%{
+        transform: scale(1.2);
+    }
+    100%{
+        transform: scale(1);
+    }
+}

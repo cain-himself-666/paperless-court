@@ -1,0 +1,29 @@
+<div class="d-flex justify-content-between align-items-center px-5 mt-5">
+    <h4>Case(s)</h4>
+    <button class="btn btn-primary" routerLink="/dashboard/paperless-court/cases-entry/add">+ Add Cases</button>
+</div>
+<section class="px-5 mt-2">
+    <hr>
+    <table class="table table-bordered" datatable [dtOptions]="dtOptions" *ngIf="cases[0]">
+        <thead>
+            <tr>
+                <th scope="col">S.No.</th>
+                <th scope="col">Case Number</th>
+                <th scope="col">CNR</th>
+                <th scope="col">Petitioner</th>
+                <th scope="col">Respondent</th>
+                <th scope="col">Upload Docs</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let c of cases; let i=index">
+                <td>{{ i+1 }}</td>
+                <td>{{ c.case_no }}</td>
+                <td>{{ c.cnr }}</td>
+                <td>{{ c.first_petitioner }}</td>
+                <td>{{ c.first_respondent}}</td>
+                <td><a [routerLink]="['/paperless-court/cases-entry/upload', c.id]">Upload</a></td>
+            </tr>
+        </tbody>
+    </table>
+</section>

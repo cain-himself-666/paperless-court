@@ -1,0 +1,14 @@
+<div class="mt-5">
+    <h2 class="text-center">Registration</h2>
+    <div *ngIf="showOtp" [@componentAnimation]>
+        <app-otp (details)="showDetailsPage($event)" (failedAck)="showAckPage($event)"></app-otp>
+    </div>
+    <div *ngIf="showDetails" [@componentAnimation]>
+        <app-details [contact]="contact" [user_type]="user_type" [details]="details" (success)="showAckPage($event)"></app-details>
+    </div>
+</div>
+<div class="mt-5">
+    <div *ngIf="showAck" [@componentAnimation]>
+        <app-acknowledgement [message]="ackMessage"></app-acknowledgement>
+    </div>
+</div>

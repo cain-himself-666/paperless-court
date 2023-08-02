@@ -1,0 +1,35 @@
+<div class="text-center mt-5">
+    <img src="assets/images/hcs_logo.png" height="170">
+    <div class="title mt-4">
+        <h1>Certified Copy</h1>
+    </div>
+</div>
+<div class="body mt-5 d-flex justify-content-center align-items-center" *ngIf="details">
+    <div class="d-block">
+        <div class="application_id">
+            <label class="form-label"><b>Application ID</b>: {{details.application_id}}</label>
+        </div>
+        <div class="applied_by">
+            <label class="form-label"><b>Applicant Name</b>: {{details.applicant_name}}</label>
+        </div>
+        <div class="case_number">
+            <label class="form-label"><b>Case Number</b>: {{details.case_no}}</label>
+        </div>
+        <div class="parties">
+            <label class="form-label"><b>Parties</b>: {{details.parties}}</label>
+        </div>
+        <div class="date_of_applied">
+            <label class="form-label"><b>Date of Applied</b>: {{details.date_of_application | date: 'dd-MM-YYYY'}}</label>
+        </div>
+        <div class="date_of_applied">
+            <label class="form-label"><b>Date of Issued</b>: {{details.issued_date | date: 'dd-MM-YYYY'}}</label>
+        </div>
+        <div class="date_of_collection">
+            <label class="form-label"><b>Date of Collection</b>: {{details.copy_collected_date | date: 'dd-MM-YYYY' || 'N/A'}}</label>
+        </div>
+        <div class="number_of_pages">
+            <label class="form-label"><b>Number of Pages</b>: {{details.pages}}</label>
+        </div>
+    </div>
+</div>
+

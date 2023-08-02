@@ -1,0 +1,29 @@
+<div class="chatgpt d-flex justify-content-center align-items-center p-5">
+    <div class="card col-xl-6 col-md-8 col-sm-12">
+        <div class="card-header text-center">
+            <h4>Chat GPT Integration by Raja</h4>
+        </div>
+        <div class="card-body">
+            <div class="messages px-2">
+                <div class="message"
+                    *ngFor="let m of messages"
+                    [ngClass]="{'ai': m.role === 'ai', 'me': m.role === 'me'}"
+                    [ngStyle]="
+                    {'margin-left': m.role === 'ai' ? 'auto': '',
+                    'background': m.role === 'ai' ? '#e9e9e9': '#695ea3',
+                    'color': m.role === 'ai' ? 'black' : 'white'}">
+                    <span>{{m.message}}</span>
+                </div>
+                <div class="text-end mt-3">
+                    <span class="typing" *ngIf="showLoader"><b>Typing ....</b></span>
+                </div>
+            </div>
+        </div>
+        <form (ngSubmit)="onSubmit()">
+            <div class="card-footer d-flex">
+                <input type="text" class="form-control" name="query" [(ngModel)]="query" placeholder="Enter Search Query ....">
+                <button class="btn btn-primary ms-3" type="submit"><i class="bi bi-send"></i></button>
+            </div>
+        </form>
+    </div>
+</div>

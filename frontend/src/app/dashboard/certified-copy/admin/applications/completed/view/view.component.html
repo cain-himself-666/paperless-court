@@ -1,0 +1,21 @@
+<section class="mt-4 px-4">
+    <h5 *ngIf="!completed_application[0]">No Applications</h5>
+    <table class="table table-bordered" datatable [dtOptions]="dtOptions" *ngIf="completed_application[0]">
+        <thead>
+            <tr>
+                <th scope="col">S.No.</th>
+                <th scope="col">Application ID</th>
+                <th scope="col">Applicant Name</th>
+                <th scope="col">Operations</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let c of completed_application; let i=index;">
+                <td>{{ i+1 }}</td>
+                <td>{{ c.application_id }}</td>
+                <td>{{ c.applicant_name }} ({{ c.applicant_contact }})</td>
+                <td class="text-center"><a (click)="onRouteDetails(c.application_id)" class="highlight">View</a></td>
+            </tr>
+        </tbody>
+    </table>
+</section>

@@ -1,0 +1,28 @@
+select{
+    border-top: 0;
+    border-right: 0;
+    border-left: 0;
+}
+span{
+    font-size: 15px;
+}
+.card-body{
+    max-height: 20rem;
+    overflow-y: scroll;
+    background-color: #FCFDFF;
+}
+.status{
+    color: yellow;
+    animation: blink 2s linear infinite;
+}
+@keyframes blink {
+    0%{
+        opacity: 1;
+    }
+    50%{
+        opacity: 0.5;
+    }
+    100%{
+        opacity: 0.3;
+    }
+  }

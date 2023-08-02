@@ -1,0 +1,135 @@
+<section class="mt-3">
+    <div class="card w-100" style="border:none;">
+        <div class="card-header text-center" style="background-color: #8fc2e9; color: #ffffff; border-bottom: 0"><h5>Summary</h5></div>
+        <div class="card-body">
+            <main class="case-details">
+                <div class="row mb-2">
+                    <div class="col-xl-2 mb-2">
+                        <label class="header form-label">CNR Number</label><br>
+                        <span id="cnr_number">{{details?.filing_no}}</span>
+                    </div>
+                    <div class="col-xl-2 mb-2">
+                        <label class="header form-label">Case Number</label><br>
+                        <span id="case_number">{{details?.finalcaseno}}</span>
+                    </div>
+                    <div class="col-xl-3 mb-2">
+                        <label class="header form-label">Petitioner's Name</label><br>
+                        <span id="petitioners_name">{{details?.pet_name}}</span>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <label class="header form-label">Respondent's Name</label><br>
+                        <span id="respondents_name">{{details?.res_name}}</span>
+                    </div>
+                    <div class="col-md-2 mb-2">
+                        <label class="header form-label">Registration Date</label><br>
+                        <span id="registration_date">{{details?.regis_date}}</span>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-2 mb-2">
+                        <label class="form-label header">Application ID</label><br>
+                        <span>{{application_id}}</span>
+                    </div>
+                    <div class="col-md-2 mb-2">
+                        <label class="form-label header">Total Pages</label><br>
+                        <span>{{pages}}</span>
+                    </div>
+                    <div class="col-md-2 mb-2">
+                        <label class="form-label header">Copies</label>
+                        <select class="form-select" style="width: 50%" (input)="onSelectCopies($event)">
+                            <option *ngFor="let c of copies" [value]="c">{{c}}</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2 mb-2">
+                        <label class="form-label header">Mode</label><br>
+                        <input type="radio" id="payment" name="payment" value="Physical" (click)="onSelectMode('Physical')">&nbsp;Physical<br>
+                        <input type="radio" id="payment" name="payment" value="Email" (click)="onSelectMode('Email')" checked>&nbsp;Email<br>
+                        <input type="radio" id="payment" name="payment" value="Both" (click)="onSelectMode('Both')">&nbsp;Both<br>
+                    </div>
+                    <div class="col-md-2 mb-2" *ngIf="!isAdvocate">
+                        <label class="form-label header">User Type</label><br>
+                        <input type="radio" name="user" value="pip" checked (click)="selectUserType('pip')"> Party In Person<br>
+                        <input type="radio" name="user" value="stranger" (click)="selectUserType('stranger')"> Stranger<br>
+                    </div>
+                    <div class="col-md-1 mb-2" *ngIf="isAccusedOption && (isAdvocate || showIsAccused)">
+                        <label class="form-label header">Accused ?</label><br>
+                        <div class="text-center w-50">
+                            <input type="checkbox" [checked]="check_is_accused" (click)="isAccused($event)">
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2" *ngIf="!showIsAccused">
+                    <div class="col-md-12">
+                        <label class="form-label header">Reason<span class="text-danger">*</span></label>
+                        <textarea class="form-control" #r rows="2" name="remarks" [(ngModel)]="reason"></textarea>
+                    </div>
+                </div>
+                <div class="text-end mt-3 mb-2">
+                    <span>Total Cost: ₹ {{ getTotalCost() }} (<a data-bs-toggle="modal" data-bs-target="#exampleModal" class="highlight">View Selected Orders and Judgements</a>)</span>
+                </div>
+            </main>
+        </div>
+    </div>
+    <div class="text-end mt-3">
+        <button class="btn btn-primary" (click)="onGoBack()">Go Back</button>
+        <button class="btn btn-primary ms-3" (click)="onRouteAckPage()">Submit</button>
+    </div>
+</section>
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Orders and Judgements</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="orders" *ngIf="orders[0]">
+                <h5>Order(s)</h5>
+                <hr>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col">Order Number</th>
+                            <th scope="col">Bench</th>
+                            <th scope="col">Order Date</th>
+                            <th scope="col">Pages</th>
+                            <th scope="col">View</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let o of orders">
+                            <td>{{ o.order_number }}</td>
+                            <td>{{ o.bench }}</td>
+                            <td>{{ o.order_date }}</td>
+                            <td>{{ o.pages }}</td>
+                            <td><a href="https://hcs.gov.in/hcs/hg_orders/{{o.filename}}" target="_blank"><button class="btn btn-primary">View</button></a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="judgements mt-3 mb-2" *ngIf="judgements[0]">
+                <h5>Judgement(s)</h5>
+                <hr>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col">Bench</th>
+                            <th scope="col">Judgement Date</th>
+                            <th scope="col">Pages</th>
+                            <th scope="col">View</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let j of judgements">
+                            <td>{{ j.bench }}</td>
+                            <td>{{ j.judgement_date }}</td>
+                            <td>{{ j.pages }}</td>
+                            <td><a href="https://hcs.gov.in/hcs/hg_orders/{{j.filename}}" target="_blank"><button class="btn btn-primary">View</button></a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+      </div>
+    </div>
+</div>

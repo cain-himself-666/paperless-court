@@ -1,0 +1,12 @@
+.menu{
+    position: relative;
+    width: 300px;
+    max-height: 90vh;
+    overflow-y:  scroll;
+}
+.heading{
+    font-size: 1.2rem;
+}
+li{
+    cursor: pointer;
+}

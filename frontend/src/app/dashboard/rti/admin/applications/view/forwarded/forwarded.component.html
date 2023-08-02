@@ -1,0 +1,60 @@
+<h5 *ngIf="!applications[0]">No Forwarded Applications</h5>
+<table class="table table-bordered" datatable [dtOptions]="dtOptions" *ngIf="applications[0]">
+    <thead>
+        <tr>
+            <th scope="col">S.No.</th>
+            <th scope="col">Application ID</th>
+            <th scope="col">Applicant Name</th>
+            <th scope="col" *ngIf="role !== 5">Forwarded To</th>
+            <th scope="col">Date of Applied</th>
+            <th scope="col">Date of Forwarded</th>
+            <th scope="col">Date of Deadline</th>
+            <th scope="col" *ngIf="role === 5">View</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let a of applications; let i=index">
+            <td>{{ i+1 }}</td>
+            <td>
+                <a data-bs-toggle="modal" (click)="getDetails(a.id)" data-bs-target="#exampleModal" style="color: #499ad9; cursor: pointer;" *ngIf="role !== 5; else oth">{{ a.application_no }}</a>
+                <ng-template #oth>
+                    {{ a.application_no }}
+                </ng-template>
+            </td>
+            <td>{{ a.related_online_applicant ? a.related_online_applicant.related_user_profile.name : a.related_offline_applicant[0].applicant_name}}</td>
+            <td *ngIf="role !== 5">{{ a.related_forwaded_to[0].forwarded_to_address }}</td>
+            <td>{{ a.applied_on | date : 'dd/MM/YYYY' }}</td>
+            <td>{{ a.related_forwaded_to[0].forwarded_on | date : 'dd/MM/YYYY' }}</td>
+            <td>{{ a.deadline_on | date : 'dd/MM/YYYY' }}</td>
+            <td *ngIf="role === 5"><a [routerLink]="['/dashboard/rti/applications/details', a.id]">View</a></td>
+        </tr>
+    </tbody>
+</table>
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Application ID: {{ application_no }}</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row mt-1">
+                    <div class="col-md-12">
+                        <label class="form-label"><b>Address:</b></label><br>
+                        <span>{{ address }}</span>
+                    </div>
+                    <div class="col-md-12 mt-4">
+                        <label class="form-label"><b>Details of Information Sought:</b></label><br>
+                        <div *ngIf="content; else na" [innerHTML]="content"></div>
+                    </div>
+                    <div class="col-md-12 mt-4">
+                        <label class="form-label"><b>Uploaded Document:</b>&nbsp;<a target="_blank" *ngIf="document_url; else na" [href]="document_url">View</a><ng-template #na><span>N/A</span></ng-template></label>
+                    </div>
+                    <div class="col-md-12 mt-3">
+                        <label class="form-label"><b>Is Below Poverty Line ?:</b>&nbsp;<span *ngIf="economic_category === 'bpl'; else no">Yes (<a target="_blank" [href]="economic_category_proof">View Proof</a>)</span><ng-template #no><span>No</span></ng-template></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

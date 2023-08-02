@@ -1,0 +1,156 @@
+<section class="mt-3">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <i class="bi bi-arrow-left-circle" style="font-size: 24px; cursor: pointer" (click)="onRouteView()"></i>
+            <h5>Application ID: {{ application_id }}</h5>
+            <i class="bi bi-printer" style="font-size: 24px; cursor: pointer" (click)="printReceipt()"></i>
+        </div>
+        <div class="card-body">
+            <div class="row" *ngIf="case_details">
+                <div class="col-md-3">
+                    <label class="form-label header">CNR</label><br>
+                    <span>{{ case_details.cnr }}</span>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label header">Case Number</label><br>
+                    <span>{{ case_details.case_number}}</span>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label header">Petitioner</label><br>
+                    <span>{{ case_details.pet_name }}</span>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label header">Respondent</label><br>
+                    <span>{{ case_details.res_name }}</span>
+                </div>
+            </div>
+        </div>
+        <div class="row px-3 mt-3 mb-3" *ngIf="profile_details">
+            <div class="col-md-6">
+                <div class="text-end mb-3">
+                    <a data-bs-toggle="modal" data-bs-target="#exampleModal2" class="highlight">(View Judgment/Orders)</a>
+                </div>
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr>
+                            <td class="header" width="20%">Applicant</td>
+                            <td>{{ profile_details.applicant_name }}</td>
+                            <td class="header" width="20%">Contact</td>
+                            <td>{{ profile_details.applicant_contact }}</td>
+                        </tr>
+                        <tr>
+                            <td class="header" width="20%">Mode</td>
+                            <td>{{ profile_details.mode === 'Both' ? 'Both (Physical & Email)' : profile_details.mode }}</td>
+                            <td class="header" width="20%">Accused</td>
+                            <td>{{ profile_details.is_accused ? 'Yes' : 'No' }}</td>
+                        </tr>
+                        <tr>
+                            <td class="header" width="20%">Total Pages</td>
+                            <td>{{ profile_details.total_pages * profile_details.copies }}</td>
+                            <td class="header" width="20%">Total Cost</td>
+                            <td>₹ {{ profile_details.total_cost }}</td>
+                        </tr>
+                        <tr *ngIf="profile_details.user_type; else adv">
+                            <td class="header" width="20%">User Type</td>
+                            <td>{{ profile_details.user_type === 'pip' ? 'Party In Person' : 'Stranger' }}</td>
+                            <td class="header" width="20%">Reason</td>
+                            <td>{{ profile_details.reason || 'N/A' }}</td>
+                        </tr>
+                        <ng-template #adv>
+                            <tr>
+                                <td class="header" width="20%">User Type</td>
+                                <td>Advocate</td>
+                                <td class="header" width="20%">Reason</td>
+                                <td>N/A</td>
+                            </tr>
+                        </ng-template>
+                        <tr>
+                            <td class="header">ID Proof</td>
+                            <td><a [href]="profile_details.applicant_id ? appUrl+'/api/media/documents/'+profile_details.applicant_id : appUrl+'/api/media/advId/'+profile_details.bar_id" target="_blank">View</a></td>
+                            <td class="header">Date of Applied</td>
+                            <td>{{ profile_details.application_date | date: 'dd-MM-YYYY' }}</td>
+                        </tr>
+                        <tr>
+                            <td class="header">Date of Issue</td>
+                            <td>{{ profile_details.issued_date | date: 'dd-MM-YYYY' }}</td>
+                            <td class="header">Date of Collection</td>
+                            <td>{{ profile_details.issued_date | date: 'dd-MM-YYYY' }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label header mt-1">Remarks</label>
+                <div class="w-100 p-2" style="height: 120px; border: 1px solid black; border-radius: 15px; overflow-y:scroll">
+                    <div *ngIf="profile_details.remarks">
+                        <span *ngFor="let r of profile_details.remarks.split('|')">{{r}}<br></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Application ID: {{ application_id }}</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="orders" *ngIf="orders[0]">
+                    <h5>Order(s)</h5>
+                    <hr>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th width="7%">S.No.</th>
+                                <th>Order Date</th>
+                                <th width="10%">Pages</th>
+                                <th width="10%">Copies</th>
+                                <th width="20%" *ngIf="profile_details.mode != 'Physical'">Certified Copy</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let o of orders; let i=index">
+                                <td class="text-center">{{ i+1 }}</td>
+                                <td><a (click)="getUrl(o.date, case_details.cnr!, o.number)">{{ o.date }}</a></td>
+                                <td class="text-center">{{ o.pages }}</td>
+                                <td class="text-center">{{ o.copies || 0 }}</td>
+                                <td class="text-center" *ngIf="profile_details.mode != 'Physical' && o.cert_copy">
+                                    <a href="{{appUrl}}/api/media/certified_copies/{{application_id!}}_order_{{i+1}}.pdf" target="_blank"><i class="bi bi-eye"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="judgements" *ngIf="judgements[0]">
+                    <h5>Judgement(s)</h5>
+                    <hr>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th width="7%">S.No.</th>
+                                <th>Judgement Date</th>
+                                <th width="10%">Pages</th>
+                                <th width="10%">Copies</th>
+                                <th width="20%" *ngIf="profile_details.mode != 'Physical'">Certified Copy</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let j of judgements; let i=index">
+                                <td class="text-center">{{ i+1 }}</td>
+                                <td><a (click)="getUrl(j.date, case_details.cnr!, 0)">{{ j.date }}</a></td>
+                                <td class="text-center">{{ j.pages }}</td>
+                                <td class="text-center">{{ j.copies || 0 }}</td>
+                                <td class="text-center" *ngIf="profile_details.mode != 'Physical' && j.cert_copy">
+                                    <a href="{{appUrl}}/api/media/certified_copies/{{application_id!}}_judgment_{{i+1}}.pdf" target="_blank"><i class="bi bi-eye"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,51 @@
+<div class="d-flex justify-content-center align-items-center h-100 mt-3">
+    <div class="d-block" style="width: 59%">
+        <form #mobile="ngForm" (ngSubmit)="sendOtp(mobile)">
+            <div class="d-flex justify-content-between mt-3">
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="user" value="advocate" ngModel #user="ngModel">
+                    <label class="form-check-label">
+                        Advocate
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="user" value="general"  ngModel #user="ngModel" required>
+                    <label class="form-check-label">
+                        Others
+                    </label>
+                </div>
+            </div>
+            <small class="text-danger" *ngIf="user.touched && user.invalid">Please select a user type</small>
+            <div class="form-floating mb-3 mt-2">
+                <input type="text" class="form-control" placeholder="contact" minlength="10" maxlength="10" pattern="[1-9]{1}[0-9]{9}" name="contact" ngModel #contact="ngModel" required>
+                <label>Mobile Number</label>
+                <div *ngIf="contact.touched && contact.invalid">
+                    <small class="text-danger" *ngIf="contact.errors!['required']">Please enter mobile number</small>
+                    <small class="text-danger" *ngIf="(contact.errors!['minlength'] && contact.errors!['pattern']) || contact.errors!['minlength']">Please enter 10 digit mobile number</small>
+                    <small class="text-danger" *ngIf="contact.errors!['pattern'] && !contact.errors!['minlength']">Mobile number must not contain alphabets/special characters</small>
+                </div>
+            </div>
+            <button class="btn btn-primary w-100" [disabled]="otpField && timer != 0">{{ otpField ? 'Resend OTP' : 'Send OTP'}}</button>
+        </form>
+        <div class="mt-3 text-center" *ngIf="otpField && timer != 0">
+            <small>Resend OTP after 0:{{ timer >= 10 ? '' : '0'}}{{timer}}s</small>
+        </div>
+        <div *ngIf="otpField">
+            <form #verify="ngForm" (ngSubmit)="onRouteDetailsPage(verify)">
+                <div class="form-floating mt-3 mb-3">
+                    <input type="text" class="form-control" placeholder="otp" minlength="6" maxlength="6" pattern="[0-9]{6}" name="otp" ngModel #otp="ngModel" required>
+                    <label>OTP</label>
+                    <div *ngIf="otp.touched && otp.invalid">
+                        <small class="text-danger" *ngIf="otp.errors!['required']">Please enter OTP</small>
+                        <small class="text-danger" *ngIf="(otp.errors!['minlength'] && otp.errors!['pattern']) || otp.errors!['minlength']">Please enter 6 digit OTP</small>
+                        <small class="text-danger" *ngIf="otp.errors!['pattern'] && !otp.errors!['minlength']">OTP must not contain alphabets/special characters</small>
+                    </div>
+                </div>
+                <div class="alert alert-danger mt-3 mb-3" *ngIf="showError !== ''">
+                    {{ showError }}
+                </div>
+                <button class="btn btn-primary w-100">Verify OTP</button>
+            </form>
+        </div>
+    </div>
+</div>

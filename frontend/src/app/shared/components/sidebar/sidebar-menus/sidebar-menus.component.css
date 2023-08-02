@@ -1,0 +1,95 @@
+ul{
+    list-style: none;
+    margin-top: 30px;
+}
+.routerActive{
+    background-color: #F3F7FF;
+    color: #499ad9;
+    border-top-right-radius: 18px;
+    border-bottom-right-radius: 18px;
+}
+.i:hover{
+    background-color: #F3F7FF;
+    border-top-right-radius: 18px;
+    border-bottom-right-radius: 18px;
+    transition: all 0.3s ease-in-out;
+}
+.i.routerActive:hover{
+    background-color: #e8f0fe;
+    color: #2C75AF;
+}
+.menu .menu-item,
+.menu .menu-item .sub-menu .sub-menu-item{
+    margin-left: -30px;
+    opacity: 1;
+    position: relative;
+    list-style: none;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.menu .menu-item .icon-links{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.menu .menu-item label,
+.menu .menu-item .sub-menu .sub-menu-item label{
+    display:flex;
+    text-decoration: none;
+    align-items: center;
+    cursor: pointer;
+}
+.menu .menu-item label i,
+.menu .menu-item .sub-menu .sub-menu-item label i{
+    height: 50px;
+    min-width: 78px;
+    text-align: center;
+    line-height: 50px;
+    font-size: 22px;
+}
+.menu .menu-item label i{
+    font-size: 22px;
+}
+.menu .menu-item .sub-menu .sub-menu-item label i{
+    font-size: 19px;
+}
+.menu .menu-item .icon-links i{
+    transition: all 0.3s ease;
+}
+.menu .menu-item label span,
+.menu .menu-item .sub-menu .sub-menu-item label span{
+    font-weight: 400;
+}
+.menu .menu-item label span{
+    font-size: 18px;
+}
+.menu .menu-item .sub-menu .sub-menu-item label span{
+    font-size: 15px;
+}
+.menu .menu-item .sub-menu{
+    margin-top: -3px;
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.2s ease;
+    background-color: #F9F9F9;
+    border-radius: 10px;
+}
+.menu .menu-item .sub-menu.active{
+    max-height: 100vh;
+    transition: all 1s ease;
+}
+.menu .menu-item .icon-links i.open{
+    rotate: 180deg;
+}
+.menu.close .menu-item .icon-links label span,
+.menu.close .menu-item .icon-links .arrow,
+.menu.close .menu-item label span{
+    opacity: 0;
+    pointer-events: none;
+}
+.menu .menu-item .icon-links i,
+.menu .menu-item label span{
+    opacity: 1;
+}

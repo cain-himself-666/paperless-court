@@ -1,0 +1,4 @@
+<div class="px-4 mt-2">
+    <app-advocate *ngIf="user_type === 'advocate'" [contact]="contact" [details]="details" (success)="onShowSuccess($event)"></app-advocate>
+    <app-general-user *ngIf="user_type === 'general'" [contact]="contact" (success)="onShowSuccess($event)"></app-general-user>
+</div>

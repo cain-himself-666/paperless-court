@@ -1,0 +1,45 @@
+<section>
+    <div class="image text-center mt-5">
+        <img src="assets/images/hcs_logo.png" height="120">
+    </div>
+    <div class="title mt-4 text-center">
+        <h5>THE HIGH COURT OF SIKKIM</h5>
+    </div>
+    <div class="sub-title1 text-center">
+        <h5>DAILY CAUSE LIST</h5>
+    </div>
+    <div class="sub-title2 text-center">
+        <h5>{{today}}</h5>
+    </div>
+    <div class="sub-title3 text-center">
+        <h5>BEFORE</h5>
+    </div>
+    <div class="sub-title4 text-center">
+        <h5>HON'BLE MR. JUSTICE BHASKAR RAJ PRADHAN</h5>
+    </div>
+    <div class="sub-title5 text-center">
+        <h5>COURT NO - 3</h5>
+    </div>
+</section>
+<div class="px-5 mt-4">
+    <table class="table table-responsive" >
+        <thead>
+            <tr>
+                <th scope="col">S.No.</th>
+                <th scope="col">Case No</th>
+                <th scope="col">Main Parties</th>
+                <th scope="col">Petitioner Advocate(s)</th>
+                <th scope="col">Respondent Advocate(s)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let c of cases">
+                <td col="span"><label>{{c.s_no}}</label></td>
+                <td col="span"><label><a style="cursor: pointer; color: #0d6efd; text-decoration: underline" (click)="onRouteCaseFiles(c.cnr)">{{c.case_no.toUpperCase()}}</a><br><span *ngIf="c.display" class="text-start"><span [innerHTML]="convertLine(c.display)"></span></span></label></td>
+                <td col="span"><label>{{c.first_petitioner.toUpperCase()}}<br>vs<br>{{c.first_respondent.toUpperCase()}}</label></td>
+                <td col="span"><label [innerHTML]="convertLine(c.petitioner_counsels.toUpperCase())"></label></td>
+                <td col="span"><label [innerHTML]="convertLine(c.respondent_counsels.toUpperCase())"></label></td>
+            </tr><br>
+        </tbody>
+    </table>
+</div>

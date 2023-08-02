@@ -1,0 +1,17 @@
+<section>
+    <header class="text-center">
+        <h2>Profile</h2>
+    </header>
+    <main>
+        <ul class="nav nav-tabs mt-2">
+            <li class="nav-item"><a class="nav-link active" [ngClass]="{'active': !toggleView, '': toggleView}" (click)="onToggle('details')">Details</a></li>
+            <li class="nav-item"><a class="nav-link" [ngClass]="{'active': toggleView, '': !toggleView}" (click)="onToggle('changPass')">Change Password</a></li>
+        </ul>
+        <div *ngIf="!toggleView" [@componentAnimation]>
+            <app-details></app-details>
+        </div>
+        <div *ngIf="toggleView" [@componentAnimation]>
+            <app-change-password></app-change-password>
+        </div>
+    </main>
+</section>

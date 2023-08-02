@@ -1,0 +1,118 @@
+<div class="px-5 mt-4">
+    <div class="title">
+        <h3>{{ heading }}</h3>
+    </div>
+    <hr>
+    <div class="form mt-5">
+        <form #caseEntry="ngForm" (ngSubmit)="onCaseEntry(caseEntry)">
+            <div class="row">
+                <div class="col-md-3">
+                    <label class="form-label">Case No.</label>
+                    <input type="text" class="form-control" name="case_no" ngModel #case_no="ngModel" required>
+                    <small class="text-danger" *ngIf="case_no.touched && case_no.invalid">Please enter case no</small>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">CNR</label>
+                    <input type="text" class="form-control" name="cnr" ngModel #cnr="ngModel" required>
+                    <small class="text-danger" *ngIf="cnr.touched && cnr.invalid">Please enter CNR</small>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Petitioner Name</label>
+                    <input type="text" class="form-control" name="petitioner_name" ngModel #petitioner_name="ngModel" required>
+                    <small class="text-danger" *ngIf="petitioner_name.touched && petitioner_name.invalid">Please enter petitioner name</small>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Respondent Name</label>
+                    <input type="text" class="form-control" name="respondent_name" ngModel #respondent_name="ngModel" required>
+                    <small class="text-danger" *ngIf="respondent_name.touched && respondent_name.invalid">Please enter respondent name</small>
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div class="col-md-6">
+                    <div class="petitioner mb-3">
+                        <h4>Petitioner Counsel(s)<span class="text-danger">*</span></h4>
+                    </div>
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between col-md-10" *ngFor="let p of petitioner_counsels; let i=index;">{{i+1}}) {{p}}<span class="text-danger" style="cursor: pointer;" (click)="deletePetitionerCounsels(p)">x</span></li>
+                    </ul>
+                    <div class="row mt-4" id="pfield">
+                        <div>
+                            <label class="form-label">Petitioner Counsel Name</label>
+                            <div class="d-flex">
+                                <div class="col-md-10">
+                                    <input type="text" class="form-control" name="counsel" [(ngModel)]="p_counsel" #counsel="ngModel">
+                                </div> 
+                                <button class="btn btn-primary click ms-2" type="button" (click)="addPetitionerCounsels()" style="max-height: 45px;">+ Add</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="respondent mb-3">
+                        <h4>Respondent Counsel(s)<span class="text-danger">*</span></h4>
+                    </div>
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between col-md-10" *ngFor="let r of respondent_counsels; let i=index;">{{i+1}}) {{r}}<span style="cursor: pointer" class="text-danger" (click)="deleteRespondentCounsels(r)">x</span></li>
+                    </ul>
+                    <div class="row mt-4" id="rfield">
+                        <div>
+                            <label class="form-label">Respondent Counsel Name</label>
+                            <div class="d-flex">
+                                <div class="col-md-10">
+                                    <input type="text" class="form-control" name="counsel" [(ngModel)]="r_counsel" #counsel="ngModel">
+                                </div>
+                                <button class="btn btn-primary click ms-2" type="button" style="max-height: 45px;" (click)="addRespondentCounsels()">+ Add</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="respondent mb-3">
+                        <h4>Additional Petitioner(s)</h4>
+                    </div>
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between col-md-10" *ngFor="let a_p of additional_petitioner; let i=index;">{{i+1}}) {{a_p}}<span style="cursor: pointer" class="text-danger" (click)="deleteAdditionalPetitioner(a_p)">x</span></li>
+                    </ul>
+                    <div class="row mt-4" id="rfield">
+                        <div>
+                            <label class="form-label">Additional Petitioner Name</label>
+                            <div class="d-flex">
+                                <div class="col-md-10">
+                                    <input type="text" class="form-control" name="add_pet" [(ngModel)]="addn_pet">
+                                </div>
+                                <button class="btn btn-primary click ms-2" type="button" (click)="addAdditionalPetitioner()">+ Add</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="respondent mb-3">
+                        <h4>Additional Respondent(s)</h4>
+                    </div>
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between col-md-10" *ngFor="let a_r of additional_respondent let i=index;">{{i+1}}) {{a_r}}<span style="cursor: pointer" class="text-danger" (click)="deleteAdditionalRespondent(a_r)">x</span></li>
+                    </ul>
+                    <div class="row mt-4" id="rfield">
+                        <div>
+                            <label class="form-label">Additional Respondent Name</label>
+                            <div class="d-flex">
+                                <div class="col-md-10">
+                                    <input type="text" class="form-control" name="add_res" [(ngModel)]="addn_res">
+                                </div>
+                                <button class="btn btn-primary click ms-2" type="button" (click)="addAdditionalRespondent()">+ Add</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="alert alert-danger mt-4" *ngIf="showError">
+                Error !! Case No already exists
+            </div>
+            <div class="text-end mt-4 mb-4">
+                <button class="btn btn-primary px-4">Next</button>
+            </div>
+        </form>
+    </div>
+</div>

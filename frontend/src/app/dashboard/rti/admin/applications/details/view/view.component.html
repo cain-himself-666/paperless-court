@@ -1,0 +1,147 @@
+<section class="container mt-5" *ngIf="details">
+    <div class="d-flex justify-content-between align-items-center">
+        <button class="btn btn-primary" routerLink="/dashboard/rti/applications/view">Go Back</button>
+        <h4>Application No: {{details.application_no}}</h4>
+        <div>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="triggerModal('receive')">Receive</button>
+            <button class="btn btn-primary ms-3" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="triggerModal('forward')" *ngIf="role === 2">Forward</button>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-md-4 mt-3">
+            <label class="form-label"><b>Applicant Name</b></label><br>
+            <label>{{details.related_online_applicant.related_user_profile.name}}</label>
+        </div>
+        <div class="col-md-4 mt-3">
+            <label class="form-label"><b>Applicant Contact</b></label><br>
+            <label>{{details.related_online_applicant.related_user_profile.contact_number}}</label>
+        </div>
+        <div class="col-md-4 mt-3">
+            <label class="form-label"><b>Date of Applied</b></label><br>
+            <label>{{details.applied_on | date: 'dd/MM/YYYY'}}</label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 mt-3">
+            <label class="form-label"><b>Applicant Address</b></label><br>
+            <label>{{details.mailing_address}}</label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 mt-3">
+            <label class="form-label"><b>Economic Category</b></label><br>
+            <label *ngIf="details.economic_category === 'bpl'; else apl">Below Poverty Line (BPL) / <a href="#">View</a></label>
+            <ng-template #apl>
+                <label>Above Poverty Line (APL)</label>
+            </ng-template>
+        </div>
+        <div class="col-md-6 mt-3">
+            <label class="form-label"><b>Supporting Documents/Applications</b></label><br>
+            <label *ngIf="details.document_url; else na"></label>
+            <ng-template #na>
+                N/A
+            </ng-template>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 mt-3">
+            <label class="form-label"><b>Content</b></label><br>
+            <div [innerHTML]="details.content"></div>
+        </div>
+    </div>
+</section>
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">{{ modal_key === 'forward' ? 'Forward Application' : 'Receive Application'}}</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" #closeBtn aria-label="Close"></button>
+        </div>
+        <form #application="ngForm" (ngSubmit)="onSubmission(application)">
+            <div class="modal-body">
+                <ng-container *ngIf="modal_key === 'receive'; else forward">
+                    Are you sure you want to receive application {{ details && details.application_no }} ?
+                </ng-container>
+                <ng-template #forward>
+                    <div class="d-flex">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault" (click)="toggle('district')" checked>
+                            <label class="form-check-label">
+                            District Court
+                            </label>
+                        </div>
+                        <div class="form-check ms-5">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault" (click)="toggle('others')">
+                            <label class="form-check-label">
+                            Others
+                            </label>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <label class="form-label">Forward To</label>
+                        <ng-container *ngIf="!showOthers; else others">
+                            <div class="row">
+                                <div class="col-md-10">
+                                    <select class="form-select" name="district" ngModel required (change)="onSelectDistrict($event)">
+                                        <option disabled value="">---Select District---</option>
+                                        <option *ngFor="let o of organisations" [value]="o.id">{{ o.name }}</option> 
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <button class="btn btn-primary" type="button" (click)="addDepartments({key: 'district'})">Add</button>
+                                </div>
+                            </div>
+                            <table class="table table-bordered mt-3" *ngIf="departments[0]">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">S.No.</th>
+                                        <th scope="col">District</th>
+                                        <th scope="col">Delete</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let d of departments; let i=index">
+                                        <td>{{ i+1 }}</td>
+                                        <td>{{ d.name }}</td>
+                                        <td class="text-center"><span class="text-danger" style="cursor: pointer" (click)="deleteDepartment(d.name)">X</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </ng-container>
+                        <ng-template #others>
+                            <div class="row">
+                                <div class="col-md-10">
+                                    <input type="text" class="form-control" name="department" ngModel required #department="ngModel">
+                                </div>
+                                <div class="col-md-2">
+                                    <button class="btn btn-primary" type="button" (click)="addDepartments({key: 'others', name: department.value})">Add</button>
+                                </div>
+                            </div>
+                            <table class="table table-bordered mt-3" *ngIf="departments[0]">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">S.No.</th>
+                                        <th scope="col">Department</th>
+                                        <th scope="col">Delete</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let d of departments; let i=index">
+                                        <td>{{ i+1 }}</td>
+                                        <td>{{ d.name }}</td>
+                                        <td class="text-center"><span class="text-danger" style="cursor: pointer" (click)="deleteDepartment(d.name)">X</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </ng-template>
+                    </div>
+                </ng-template>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-primary" type="submit">{{ modal_key === 'forward' ? 'Forward' : 'Receive'}}</button>
+            </div>
+        </form>
+      </div>
+    </div>
+</div>

@@ -1,0 +1,13 @@
+<div class="title text-center mb-4">
+    <h2>My Applications</h2>
+</div>
+<header class="mt-4">
+    <h4>Application(s)</h4>
+    <hr>
+    <div *ngIf="showAppView">
+        <app-view (routeDetails)="onShowDetailsView($event)"></app-view>
+    </div>
+    <div *ngIf="showDetailsView">
+        <app-details [application_id]="application_id" (routeAppView)="onShowAppView($event)"></app-details>
+    </div>
+</header>

@@ -1,0 +1,2 @@
+<app-view [id]="id" *ngIf="showView" (routeAck)="onShowAck($event)"></app-view>
+<app-ack *ngIf="showAck" [application_id]="application_id" [key]="key" [forwarded_to]="forwarded_to"></app-ack>

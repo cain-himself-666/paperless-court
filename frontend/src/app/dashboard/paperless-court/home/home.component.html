@@ -1,0 +1,21 @@
+<div class="d-flex justify-content-center align-items-center">
+    <div class="card w-25 mt-5">
+        <div class="card-body px-5">
+            <div class="text-center mt-3 mb-4">
+                <h4>Paperless Court</h4>
+            </div>
+            <div class="row mb-4">
+                <form #select_date="ngForm" (ngSubmit)="onSelectDate(select_date)">
+                    <div class="col-md-12">
+                        <label class="form-label">Select Date</label>
+                        <input type="date" class="form-control" name="date" ngModel required #date="ngModel">
+                        <small class="text-danger" *ngIf="date.touched && date.invalid">Please select a date to continue</small>
+                    </div>
+                    <div class="col-md-12">
+                        <button class="btn btn-primary mt-3 w-100">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

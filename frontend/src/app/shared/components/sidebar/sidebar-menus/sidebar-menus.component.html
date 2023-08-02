@@ -1,0 +1,96 @@
+<ul class="menu" [ngClass]="{'close': toggleValue, '': !toggleValue}">
+    <li class="menu-item i" [routerLinkActive]="'routerActive'" routerLink="/dashboard/home">
+        <label>
+            <i class="bi bi-pc-display-horizontal"></i>
+            <span>Dashboard</span>
+        </label>
+    </li>
+    <li class="menu-item">
+        <div class="icon-links" (click)="onToggle(elem1,elem2)">
+            <label>
+                <i class="bi bi-file-text"></i>
+                <span>Certified Copy</span>
+            </label>
+            <i class="bi bi-chevron-down arrow mx-3" #elem1></i>
+        </div>
+        <ul class="sub-menu" #elem2>
+            <li class="sub-menu-item i" [routerLinkActive]="'routerActive'" routerLink="/dashboard/certified-copy/apply" *ngIf="role.related_group[0].id === 3 || role.related_group[0].id === 4 ">
+                <label>
+                    <i class="bi bi-journal-plus" id="btn"></i>
+                    <span>Apply Certified Copy</span>
+                </label>
+            </li>
+            <li class="sub-menu-item i" [routerLinkActive]="'routerActive'" routerLink="/dashboard/certified-copy/my-applications" *ngIf="role.related_group[0].id === 3 || role.related_group[0].id === 4">
+                <label>
+                    <i class="bi bi-journals" id="btn"></i>
+                    <span>My Applications</span>
+                </label>
+            </li>
+            <li class="sub-menu-item i" [routerLinkActive]="'routerActive'" routerLink="/dashboard/certified-copy/my-cases" *ngIf="role.related_group[0].id === 3 || role.related_group[0].id === 4 ">
+                <label>
+                    <i class="bi bi-folder"></i>
+                    <span>My Cases</span>
+                </label>
+            </li>
+            <li class="sub-menu-item i" [routerLinkActive]="'routerActive'" routerLink="/dashboard/certified-copy/applications" *ngIf="role.related_group[0].id === 2">
+                <label>
+                    <i class="bi bi-stack"></i>
+                    <span>Applications</span>
+                </label>
+            </li>
+            <li class="sub-menu-item i" [routerLinkActive]="'routerActive'" routerLink="/dashboard/certified-copy/history" *ngIf="role.related_group[0].id === 2"> 
+                <label>
+                    <i class="bi bi-clock-history"></i>
+                    <span>History</span>
+                </label>
+            </li>
+        </ul>
+    </li>
+    <li class="menu-item">
+        <div class="icon-links" (click)="onToggle(elem3,elem4)">
+            <label>
+                <i class="bi bi-info-square"></i>
+                <span>RTI</span>
+            </label>
+            <i class="bi bi-chevron-down arrow mx-3" #elem3></i>
+        </div>
+        <ul class="sub-menu" #elem4>
+            <li class="sub-menu-item i" [routerLinkActive]="'routerActive'" routerLink="/dashboard/rti/apply" *ngIf="role.related_group[0].id === 3 || role.related_group[0].id === 4 ">
+                <label>
+                    <i class="bi bi-pencil-square"></i>
+                    <span>Apply RTI</span>
+                </label>
+            </li>
+            <li class="sub-menu-item i" [routerLinkActive]="'routerActive'" routerLink="/dashboard/rti/my-applications" *ngIf="role.related_group[0].id === 3 || role.related_group[0].id === 4 ">
+                <label>
+                    <i class="bi bi-journals" id="btn"></i>
+                    <span>My Applications</span>
+                </label>
+            </li>
+            <li class="sub-menu-item i" [routerLinkActive]="'routerActive'" routerLink="/dashboard/rti/applications" *ngIf="role.related_group[0].id === 2 || role.related_group[0].id === 5">
+                <label>
+                    <i class="bi bi-stack"></i>
+                    <span>Applications</span>
+                </label>
+            </li>
+            <li class="sub-menu-item i" [routerLinkActive]="'routerActive'" routerLink="/dashboard/rti/receive-applications" *ngIf="role.related_group[0].id === 2">
+                <label>
+                    <i class="bi bi-info-square"></i>
+                    <span>Receive Applications</span>
+                </label>
+            </li>
+        </ul>
+    </li>
+    <li class="menu-item i" [routerLinkActive]="'routerActive'" routerLink="/dashboard/profile">
+        <label>
+            <i class="bi bi-person-badge"></i>
+            <span>Profile</span>
+        </label>
+    </li>
+    <li class="menu-item i" [routerLinkActive]="'routerActive'" routerLink="/dashboard/logs" *ngIf="role.related_group[0].id === 2">
+        <label>
+            <i class="bi bi-hdd-stack"></i>
+            <span>Logs</span>
+        </label>
+    </li>
+</ul>

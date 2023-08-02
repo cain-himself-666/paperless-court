@@ -1,0 +1,269 @@
+<main>
+    <section>
+        <form #search="ngForm" (ngSubmit)="getCaseDetails(search)">
+            <div class="row d-flex justify-content-center">
+                <div class="col-md-3 mb-3">
+                    <label class="form-label">Case Type</label>
+                    <select class="form-select" name="case_type" [ngModel]="selected_case_type" #case_type="ngModel" required>
+                        <option disabled value="">---Select Case Type---</option>
+                        <option *ngFor="let c of case_types" [value]="c.casetype">{{ c.case_type_name }}</option>
+                    </select>
+                    <small class="text-danger" *ngIf="case_type.touched && case_type.invalid">Please select a case type</small>
+                </div>
+                <div class="col-md-2 mb-3">
+                    <label class="form-label">Case Number</label>
+                    <input type="text" required minLength="1" maxLength="3" pattern="\d{1,3}" ngModel name="case_no" class="form-control" #case_no="ngModel">
+                    <small class="text-danger" *ngIf="case_no.touched && case_no.invalid">Please enter a case number</small>
+                </div>
+                <div class="col-md-2 mb-3">
+                    <label class="form-label">Year</label>
+                    <select class="form-select" name="case_year" [ngModel]="selected_case_year" #case_year="ngModel" required>
+                        <option *ngFor="let y of years" [value]="y">{{ y }}</option>
+                    </select>
+                </div>
+                <div class="col-md-1 mb-3 text-center">
+                    <button class="btn btn-primary" style="margin-top:31px;">Search</button>
+                </div>
+            </div>
+        </form>
+    </section>
+    <app-page-calculator-loader *ngIf="showLoader"></app-page-calculator-loader>
+    <div class="alert alert-success text-center mt-3 mb-3" *ngIf="showSuccess">
+        Case added successfully !!
+    </div>
+    <div class="d-flex justify-content-center align-items-center mt-3" *ngIf="showError === 'true' && !showLoader">
+        <div class="alert alert-danger w-50">
+            Case Not Found !!
+        </div>
+    </div>
+    <section class="mt-3" *ngIf="showError === 'false' && !showLoader">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center" style="background-color: #499ad9; color: #fff">
+                <i class="bi bi-arrow-left-circle" (click)="onRouteView()"></i>
+                <h5>Case Details</h5>
+                <i class="bi bi-folder-plus" (click)="addCase()"></i>
+            </div>
+            <div class="card-body" style="height: 32rem; overflow-y: scroll;">
+                <div class="row ms-4 mt-3 mb-3">
+                    <div class="col-md-4">
+                        <b>Case Type</b>
+                    </div>
+                    <div class="col-md-8">
+                        {{all_case_details[0].case_type_name}}
+                    </div>
+                </div>
+                <div class="row ms-4 mb-3">
+                    <div class="col-md-4">
+                        <b>Date of Filing</b>
+                    </div>
+                    <div class="col-md-8">
+                        {{all_case_details[0].regis_date}}
+                    </div>
+                </div>
+                <div class="row ms-4 mb-3">
+                    <div class="col-md-4">
+                        <b>Case Status</b>
+                    </div>
+                    <div class="col-md-8">
+                        {{all_case_details[0].status}}
+                    </div>
+                </div>
+                <div class="row ms-4 mb-3">
+                    <div class="col-md-4">
+                        <b>Case Number</b>
+                    </div>
+                    <div class="col-md-8">
+                        {{all_case_details[0].case_no}}
+                    </div>
+                </div>
+                <div class="row ms-4 mb-3">
+                    <div class="col-md-4">
+                        <b>CNR</b>
+                    </div>
+                    <div class="col-md-8">
+                        {{all_case_details[0].cino}}
+                    </div>
+                </div>
+                <div class="row ms-4 mb-3">
+                    <div class="col-md-4">
+                        <b>Next Date</b>
+                    </div>
+                    <div class="col-md-8">
+                        {{all_case_details[0].next_date}}
+                    </div>
+                </div>
+                <div class="row mt-5 ms-4" *ngIf="bench[0]">
+                    <div class="col-md-12 mb-3">
+                        <h5>Bench</h5>
+                        <hr>
+                        <div class="row mt-3 mb-3">
+                            <div class="col-md-4">
+                                <b>Bench</b>
+                            </div>
+                            <div class="col-md-8">
+                                {{bench[0].judgename}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3 ms-4">
+                    <div class="col-md-6">
+                        <h5>Petitioner(s) & Advocate(s)</h5>
+                        <hr>
+                        <div class="petitioner">
+                            <div class="row mt-3 mb-3">
+                                <div class="col-md-4">
+                                    <b>Petitioner(s)</b>
+                                </div>
+                                <div class="col-md-8">
+                                    {{all_case_details[0].pet_name}}
+                                </div>
+                            </div>
+                            <div class="row mt-3 mb-3">
+                                <div class="col-md-4">
+                                    <b>Address</b>
+                                </div>
+                                <div class="col-md-8">
+                                    {{all_case_details[0].pet_address}}
+                                </div>
+                            </div>
+                            <div class="row mt-3 mb-3">
+                                <div class="col-md-4">
+                                    <b>Advocate(s)</b>
+                                </div>
+                                <div class="col-md-8" *ngIf="petitioners[0]; else no_adv">
+                                    <span *ngFor="let advocates of petitioners">{{advocates.adv_name}},&nbsp;</span>
+                                </div>
+                                <ng-template #no_adv>
+                                    <div class="col-md-8">
+                                        <span>N/A</span>
+                                    </div>
+                                </ng-template>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Respondent(s) & Advocate(s)</h5>
+                        <hr>
+                        <div class="petitioner">
+                            <div class="row mt-3 mb-3">
+                                <div class="col-md-4">
+                                    <b>Respondent(s)</b>
+                                </div>
+                                <div class="col-md-8">
+                                    {{all_case_details[0].res_name}}
+                                </div>
+                            </div>
+                            <div class="row mt-3 mb-3">
+                                <div class="col-md-4">
+                                    <b>Address</b>
+                                </div>
+                                <div class="col-md-8">
+                                    {{all_case_details[0].res_address}}
+                                </div>
+                            </div>
+                            <div class="row mt-3 mb-3">
+                                <div class="col-md-4">
+                                    <b>Advocate(s)</b>
+                                </div>
+                                <div class="col-md-8" *ngIf="respondents[0]; else no_adv">
+                                    <span *ngFor="let advocates of respondents">{{advocates.adv_name}},&nbsp;</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4 ms-4">
+                    <h4>Acts</h4>
+                    <hr>
+                    <h5 *ngIf="!acts[0]">No records of Acts</h5>
+                    <table class="table table-bordered" *ngIf="acts[0]">
+                        <thead style="background-color: #337ab7; color: white;">
+                            <tr>
+                                <th class="col">S.No.</th>
+                                <th class="col">Under Act(s)</th>
+                                <th class="col">Under Section(s)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let act of acts; let i=index">
+                                <td>{{i+1}}</td>
+                                <td>{{act.actname}}</td>
+                                <td>{{act.section}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="mt-4 ms-4">
+                    <h4>Interlocutory Applications</h4>
+                    <hr>
+                    <h5 *ngIf="!ia[0]">No records of Interlocutory Applications</h5>
+                    <table class="table table-bordered" *ngIf="ia[0]">
+                        <thead  style="background-color: #337ab7; color: white;">
+                            <tr>
+                                <th class="col">IA No.</th>
+                                <th class="col">IA Date</th>
+                                <th class="col">Prayer</th>
+                                <th class="col">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let a of ia">
+                                <td>{{a.ia_no}}</td>
+                                <td>{{a.ia_date_of_filing}}</td>
+                                <td>{{a.relief_offense}}</td>
+                                <td>{{a.iastatus}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="mt-4 ms-4">
+                    <h4>Daily Orders</h4>
+                    <hr>
+                    <h5 *ngIf="!orders[0]">No records of Daily Orders</h5>
+                    <table class="table table-bordered" *ngIf="orders[0]">
+                        <thead  style="background-color: #337ab7; color: white;">
+                            <tr>
+                                <th class="col">Order Date</th>
+                                <th class="col">Judge(s)</th>
+                                <th class="col">IA No</th>
+                                <th class="col">View</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let order of orders">
+                                <td>{{order.order_dt}}</td>
+                                <td>{{order.judgename}}</td>
+                                <td></td>
+                                <td><a href="https://hcs.gov.in/hcs/hg_orders/{{order.orderpdf}}" target="_blank">View</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="mt-4 ms-4">
+                    <h4>Judgments/Final Orders</h4>
+                    <hr>
+                    <h5 *ngIf="!judgments[0]">No records of Judgments/Final Orders</h5>
+                    <table class="table table-bordered" *ngIf="judgments[0]">
+                        <thead  style="background-color: #337ab7; color: white;">
+                            <tr>
+                                <th class="col">Judgement Date</th>
+                                <th class="col">Judge(s)</th>
+                                <th class="col">IA No</th>
+                                <th class="col">View</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let j of judgments">
+                                <td>{{j.judgement_dt}}</td>
+                                <td>{{j.judgename}}</td>
+                                <td></td>
+                                <td><a href="https://hcs.gov.in/hcs/hg_orders/{{j.filename}}" target="_blank">View</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>

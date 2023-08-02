@@ -1,0 +1,31 @@
+<div class="text-center">
+    <h2>Logs</h2>
+</div>
+<section class="mt-5">
+    <h4>Logs(s)</h4>
+    <hr>
+    <table class="table table-bordered" datatable [dtOptions]="dtOptions" *ngIf="logs[0]">
+        <thead>
+            <tr>
+                <th class="col">S.No.</th>
+                <th class="col">Username</th>
+                <th class="col">IP Address of the machine</th>
+                <th class="col">Attempt Login</th>
+                <th class="col">Logout</th>
+                <th class="col">Is Active</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let log of logs; let i=index">
+                <td>{{i+1}}</td>
+                <td>{{log.username}}</td>
+                <td>{{log.ip}}</td>
+                <td>Date: {{log.attempt_date_time | date: 'dd-MM-YYYY'}} Time: {{log.attempt_date_time | date: 'hh:mm:ss a'}}</td>
+                <td *ngIf="log.logout_time">Date: {{log.logout_time | date: 'dd-MM-YYYY' }} Time: {{log.logout_time | date: 'hh:mm:ss a'}}</td>
+                <td *ngIf="!log.logout_time">N/A</td>
+                <td *ngIf="log.logout_time">No</td>
+                <td *ngIf="!log.logout_time">Yes</td>
+            </tr>
+        </tbody>
+    </table>
+</section>

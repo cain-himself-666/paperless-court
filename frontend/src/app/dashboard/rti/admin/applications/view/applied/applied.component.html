@@ -1,0 +1,23 @@
+<h5 *ngIf="!applications[0]">No Applied Applications</h5>
+<table class="table table-bordered" datatable [dtOptions]="dtOptions" *ngIf="applications[0]">
+    <thead>
+        <tr>
+            <th scope="col">S.No.</th>
+            <th scope="col">Application ID</th>
+            <th scope="col">Applicant Name</th>
+            <th scope="col">Date of Applied</th>
+            <th scope="col">Date of Deadline</th>
+            <th scope="col">Operations</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let a of applications; let i=index">
+            <td>{{ i+1 }}</td>
+            <td>{{ a.application_no }}</td>
+            <td>{{ a.related_online_applicant ? a.related_online_applicant.related_user_profile.name : a.related_offline_applicant[0].applicant_name}}</td>
+            <td>{{ a.applied_on | date : 'dd/MM/YYYY' }}</td>
+            <td>{{ a.deadline_on | date : 'dd/MM/YYYY' }}</td>
+            <td><a [routerLink]="['/dashboard/rti/applications/details', a.id]">View</a></td>
+        </tr>
+    </tbody>
+</table>

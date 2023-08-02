@@ -1,0 +1,64 @@
+<section>
+    <header class="text-center">
+        <h2>Applications</h2>
+    </header>
+    <main class="mt-5">
+        <div class="text-center" *ngIf="myApplications.count === 0">
+            <h5>No Applications Found</h5>
+        </div>
+        <table class="table table-bordered" datatable [dtOptions]="dtOptions" *ngIf="myApplications.count > 0">
+            <thead>
+                <tr>
+                    <th scope="col">S.No.</th>
+                    <th scope="col">Application ID</th>
+                    <th scope="col">Applied Date</th>
+                    <th scope="col">Date of Deadline</th>
+                    <th scope="col">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let a of myApplications.results; let i=index">
+                    <td>{{ i+1 }}</td>
+                    <td><a data-bs-toggle="modal" (click)="getDetails(a.id)" data-bs-target="#exampleModal" style="color: #499ad9; cursor: pointer;">{{ a.application_no }}</a></td>
+                    <td>{{ a.created_at | date: 'dd/MM/YYYY'}}</td>
+                    <td>{{ a.deadline_on | date: 'dd/MM/YYYY'}}</td>
+                    <td>{{ a.status.toUpperCase() }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+</section>
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Application ID: {{ application_no }}</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row mt-1">
+                    <div class="col-md-12">
+                        <label class="form-label"><b>Address:</b></label><br>
+                        <span>{{ address }}</span>
+                    </div>
+                    <div class="col-md-12 mt-4">
+                        <label class="form-label"><b>Details of Information Sought:</b></label><br>
+                        <div *ngIf="content; else na" [innerHTML]="content"></div>
+                    </div>
+                    <div class="col-md-12 mt-4">
+                        <label class="form-label"><b>Uploaded Document:</b>&nbsp;<a target="_blank" *ngIf="document_url; else na" [href]="document_url">View</a><ng-template #na><span>N/A</span></ng-template></label>
+                    </div>
+                    <div class="col-md-12 mt-3">
+                        <label class="form-label"><b>Is Life and Liberty of a person ? :</b>&nbsp;<span *ngIf="life_and_liberty; else no1">Yes</span><ng-template #no1><span>No</span></ng-template></label>
+                    </div>
+                    <div class="col-md-12 mt-3">
+                        <label class="form-label"><b>Is Sensorily Disabled ? :</b>&nbsp;<span *ngIf="sensorily_disabled; else no2">Yes</span><ng-template #no2><span>No</span></ng-template></label>
+                    </div>
+                    <div class="col-md-12 mt-3">
+                        <label class="form-label"><b>Is Below Poverty Line ? :</b>&nbsp;<span *ngIf="economic_category === 'bpl'; else no3">Yes (<a target="_blank" [href]="economic_category_proof">View Proof</a>)</span><ng-template #no3><span>No</span></ng-template></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,21 @@
+<h5 *ngIf="!data[0]">No Applications Found</h5>
+<table class="table table-bordered" datatable [dtOptions]="dtOptions" *ngIf="data[0]">
+    <thead>
+        <tr>
+            <th scope="col">S.No.</th>
+            <th scope="col">Application ID</th>
+            <th scope="col">Applicant Name</th>
+            <th scope="col">Applied Date</th>
+            <th scope="col">Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let d of data; let i=index">
+            <td>{{ i+1 }}</td>
+            <td><a (click)="getApplicationDetails(d.application_id)" class="highlight">{{ d.application_id }}</a></td>
+            <td>{{ this.my_details.related_profile.name }} ({{this.my_details.related_profile.contact_number}})</td>
+            <td>{{ d.application_last_updated | date: 'dd-MM-YYYY' }}</td>
+            <td class="text-center">{{ d.application_status }}</td>
+        </tr>
+    </tbody>
+</table>

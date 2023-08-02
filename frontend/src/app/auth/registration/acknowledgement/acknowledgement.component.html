@@ -1,0 +1,21 @@
+<div class="title text-center mt-5 px-5">
+    <div class="ack">
+        <div class="wrapper">
+            <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52" *ngIf="this.ackMessage === 'success'">
+                <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
+                <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+            </svg>
+            <svg class="crossmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52" *ngIf="this.ackMessage === 'nocis' || this.ackMessage === 'userexist'">
+                <circle class="crossmark__circle" cx="26" cy="26" r="25" fill="none"/>
+                <path class="crossmark__check" fill="none" d="M16,16 l20,20"/>
+                <path class="crossmark__check" fill="none" d="M16,36 l20,-20"/>
+            </svg>
+        </div>
+        <div class="text-center mt-3">
+            <h4 [ngStyle]="{'color': this.ackMessage !== 'success' ? 'red' : '#347bb3'}">{{ displayMessage }}</h4>
+        </div>
+        <div class="text-center mt-3" style="color: #347bb3">
+            <h5>Click <a routerLink="/auth">here</a> to go back to login page</h5>
+        </div>
+    </div>
+</div>
